@@ -1,5 +1,6 @@
 'use strict';
 var kue = require('kue');
+var request = require('request');
 var queue = kue.createQueue();
 var queueWorkerContext;
 var isQueueProcessing = true;
@@ -8,35 +9,36 @@ var jobQueueName = 'scraper' + (new Date()).getTime();
 var tasks = [
 	{
 		productName: 'A',
-		productURL: 'http://A',
+		productURL: 'http://google.com',
 		delay: '2000'
 	},
 	{
 		productName: 'B',
-		productURL: 'http://B',
+		productURL: 'http://reddit.com',
 		delay: '3000'
 	},
 	{
 		productName: 'C',
-		productURL: 'http://C',
+		productURL: 'http://facebook.com',
 		delay: '4000'
 	},
 	{
 		productName: 'D',
-		productURL: 'http://D',
+		productURL: 'http://aakashgoel.com',
 		delay: '6000'
 	},
 	{
 		productName: 'E',
-		productURL: 'http://E',
+		productURL: 'http://cheapass.in',
 		delay: '6000'
 	}
 ];
 
 function processURL(url, done) {
-	setTimeout(function() {
-		done(null);
-	}, 2000);
+    request(url, function(err, response, body) {
+        console.log('done should be called for url => ', url);
+        done(null);
+    });
 }
 
 function queuePromoteAndProcess() {
